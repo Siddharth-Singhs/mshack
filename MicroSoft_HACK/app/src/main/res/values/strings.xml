@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">Emergency</string>
+    <string name="title_text">Are you Safe?</string>
+    <string name="rest_api_key">a6pktvncdvp1c2dv5pddyl1mthpipa8y</string>
+    <string name="map_sdk_key">gaul5hatpbt1o6ws79h5tt4zm5hnf1y7</string>
+    <string name="client_id_key">LSJtKxsfYcEvekqhkGPGTIcIaCUJCkCZnpcOdLrPnzS3bA6y5os-5g==</string>
+    <string name="client_secret_key">M8TOsT5LpBN2NCp_k20wZCfF0w9jcmAb1CF2saWmhqhVi84RUlJs3g==</string>
+
+    //MapWork
+    <string name="safe_loading">Loading</string>
+    <string name="safe_unsucessful">Check the Internet Connection</string>
+    //Activity sign layout Strings
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_sign_in_button">Sign In</string>
+    <string name="login_no_account">Don\'t have an account ?</string>
+    <string name="login_sign_up">Sign Up</string>
+    <string name="login_name_hint">Name</string>
+
+    //Login Actvity Strings
+    <string name="sign_in_enter_the_email">Enter the email</string>
+    <string name="sign_in_enter_the_password">Enter the password</string>
+    <string name="sign_in_login_successfully">Login In Successfully</string>
+    <string name="sign_in_login_failed">Login Failed</string>
+    <string name="sign_in_message_dialog">Login .....</string>
+    <string name="sign_in_enter_the_name">Enter the Name</string>
+    <string name="sign_up_message_dialog">Registering User .....</string>
+    <string name="sign_up_register_successful">Registerd Successful</string>
+    <string name="sign_up_registration_failed">Cannot Register</string>
+
+
+    //Copied
+    <string name="marker">Marker</string>
+
+    <string name="touch_event">Touch Event</string>
+    <string name="map_center">Map center</string>
+    <string name="top_left">Top left</string>
+    <string name="top_right">Top Right</string>
+    <string name="bottom_left">Bottom left</string>
+    <string name="bottom_right">Bottom right</string>
+    <string name="zoom_level">Zoom level</string>
+
+    <!-- map_menu-->
+    <string name="set_departure">Set Start</string>
+    <string name="set_destination">Set Stop</string>
+    <string name="set_viapoint">Add Via-Point</string>
+
+
+    <string name="set_as">Set as</string>
+    <string name="driving_directions">Driving Directions</string>
+
+
+
+
+    <!--Map samples-->
+    <string name="map_markers">Map Markers</string>
+    <string name="polyline">Polyline</string>
+    <string name="map_event">Map Events</string>
+    <string name="info_windows">Info Windows</string>
+    <string name="marker_cluster">Marker Cluster</string>
+    <string name="user_location">User Location</string>
+
+    <string name="polygons">Polygons</string>
+    <string name="arrow_marker">Arrow Marker</string>
+    <string name="marker_test">Markers Test</string>
+    <string name="geocode_reverse_geocode">GeoCode reverse GeoCode</string>
+    <string name="auto_suggest">Auto Suggest</string>
+    <string name="search_nearby">Search Nearby</string>
+    <string name="drawer_close">close</string>
+    <string name="drawer_open">open</string>
+</resources>
