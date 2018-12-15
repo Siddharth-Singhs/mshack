@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.emergency.MapWork.SafeActivity">
+
+    <TextView
+        android:id="@+id/text_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:text="@string/title_text"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"/>
+    <Button
+        android:id="@+id/btn_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        android:layout_below="@+id/text_field"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="32dp"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/btn_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btn_yes"
+        android:layout_marginEnd="64dp"
+        android:text="No" />
+
+</RelativeLayout>
+
