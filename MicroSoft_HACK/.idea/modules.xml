@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MicroSoft HACK.iml" filepath="$PROJECT_DIR$/MicroSoft HACK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MicroSoft_HACK.iml" filepath="$PROJECT_DIR$/MicroSoft_HACK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
