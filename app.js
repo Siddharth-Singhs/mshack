@@ -1,9 +1,8 @@
 var express = require("express"),
     app     = express(),
     bodyParser = require("body-parser"),
-    lat,
-    long,
-    center;
+    loginid,
+    password;
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -12,23 +11,30 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // ROUTES
 app.get("/", function(req, res){
-    res.redirect("/home");
+    res.redirect("/login");
+});
+
+app.get("/login", function(req, res){
+    res.render("login");
 });
 
 app.get("/home", function(req, res){
-    res.render("trial");
+    res.render("home");
 });
 
-app.get("/maps", function(req, res){
-    res.render("maps");
-});
+// app.get("/maps", function(req, res){
+//     res.render("maps");
+// });
 
-app.post("/search", function (req, res) {
-    lat = parseFloat(req.body.lattitude);
-    long = parseFloat(req.body.longitude);
-    res.redirect("/home");
-    center = [lat, long];
-    console.log(center);
+app.post("/login", function (req, res) {
+    loginid = req.body.loginid;
+    password = req.body.password;
+    if(loginid=="kunal" && password=="1234"){
+        res.redirect("/home")
+    }
+    else {
+        res.redirect("/login")
+    }
 })
 
 

@@ -50,7 +50,7 @@ setTimeout(function(){
             var radius = 1000;
             marker.setLatLng([lat, long]);
             currentDiameter = L.circle([lat, long], {
-                color: '#ff1517',
+                color: 'ff1517',
                 fillColor: '#ff1517',
                 fillOpacity: 0.5,
                 radius: radius
