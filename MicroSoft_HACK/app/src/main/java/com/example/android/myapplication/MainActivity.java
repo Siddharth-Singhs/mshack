@@ -1,5 +1,6 @@
 package com.example.android.myapplication;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -28,11 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private ArrayList<String> testFragmentNames;
     private int selectedFragmentIndex = 0;
+    private String longitude;
+    private String latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        latitude=intent.getStringExtra("Latitude");
+        longitude=intent.getStringExtra("Longitude");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -144,9 +150,12 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new MarkersInfoWindowFragment();
 
         }
-
+        Bundle bundle = new Bundle();
+        bundle.putString("Longitude", longitude);
+        bundle.putString("Latitude",latitude);
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragment.setArguments(bundle);
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();

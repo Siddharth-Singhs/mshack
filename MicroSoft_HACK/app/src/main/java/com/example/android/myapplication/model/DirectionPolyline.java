@@ -4,9 +4,6 @@ import com.mmi.util.GeoPoint;
 
 import java.util.ArrayList;
 
-/**
- * Created by Mohammad Akram on 03-04-2015.
- */
 public class DirectionPolyline {
 
     private GeoPoint start;

@@ -34,20 +34,8 @@ public class MarkersClusteringFragment extends MapBaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         ArrayList<MarkerModel> markerModels = new ArrayList<>();
-        markerModels.add(new MarkerModel(28.549356 + "", 77.26780099999999 + "", "28.549356,77.26780099999999", null, new GeoPoint(28.549356, 77.26780099999999)));
-        markerModels.add(new MarkerModel(28.551844 + "", 77.26749 + "", "28.551844,77.26749", null, new GeoPoint(28.551844, 77.26749)));
-        markerModels.add(new MarkerModel(28.554454 + "", 77.265473 + "", "28.554454,77.265473", null, new GeoPoint(28.554454, 77.265473)));
-        markerModels.add(new MarkerModel(28.549637999999998 + "", 77.262909 + "", "28.549637999999998,77.262909", null, new GeoPoint(28.549637999999998, 77.262909)));
-        markerModels.add(new MarkerModel(28.555245 + "", 77.266117 + "", "28.555245,77.266117", null, new GeoPoint(28.555245, 77.266117)));
-        markerModels.add(new MarkerModel(28.558149 + "", 77.269787 + "", "28.558149,77.269787", null, new GeoPoint(28.558149, 77.269787)));
-        markerModels.add(new MarkerModel(28.555369 + "", 77.271042 + "", "28.555369,77.271042", null, new GeoPoint(28.555369, 77.271042)));
-        markerModels.add(new MarkerModel(28.544428 + "", 77.279057 + "", "28.544428,77.279057", null, new GeoPoint(28.544428, 77.279057)));
-        markerModels.add(new MarkerModel(28.538275 + "", 77.283821 + "", "28.538275,77.283821", null, new GeoPoint(28.538275, 77.283821)));
-        markerModels.add(new MarkerModel(28.536604999999998 + "", 77.2872 + "", "28.536604999999998,77.2872", null, new GeoPoint(28.536604999999998, 77.2872)));
-        markerModels.add(new MarkerModel(28.538442999999997 + "", 77.291921 + "", "28.538442999999997,77.291921", null, new GeoPoint(28.538442999999997, 77.291921)));
-        markerModels.add(new MarkerModel(28.542326 + "", 77.30133 + "", "28.542326,77.30133", null, new GeoPoint(28.542326, 77.30133)));
-        markerModels.add(new MarkerModel(28.542609 + "", 77.30211299999999 + "", "28.542609,77.30211299999999", null, new GeoPoint(28.542609, 77.30211299999999)));
-        markerModels.add(new MarkerModel(28.543042999999997 + "", 77.302843 + "", "28.543042999999997,77.302843", null, new GeoPoint(28.543042999999997, 77.302843)));
+        markerModels.add(new MarkerModel(new GeoPoint(28.549356, 77.26780099999999)));
+
 
 
         addOverLays(markerModels);
@@ -67,8 +55,6 @@ public class MarkersClusteringFragment extends MapBaseFragment {
 
         for (MarkerModel markerModel : markerModels) {
             Marker marker = new Marker(mMapView);
-            marker.setTitle(markerModel.getTitle());
-            marker.setDescription(markerModel.getDescription());
             marker.setIcon(getResources().getDrawable(R.drawable.marker_default_1));
             marker.setPosition(markerModel.getGeoPoint());
             marker.setInfoWindow(null);
