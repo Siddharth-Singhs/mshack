@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,6 +53,10 @@ public class SafeActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private  String latitude;
     private  String longitude;
+    private DatabaseReference greenZoneData;
+    private DatabaseReference redZoneData;
+    private ArrayList<GeoPoint> greenPoints;
+    private ArrayList<GeoPoint> redPoints;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,32 +68,65 @@ public class SafeActivity extends AppCompatActivity {
             finish();
         }
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        greenZoneData=FirebaseDatabase.getInstance().getReference().getDatabase().getReference("Yes");
+        redZoneData=FirebaseDatabase.getInstance().getReference().getDatabase().getReference("No");
+        greenPoints=new ArrayList<>();
+        redPoints=new ArrayList<>();
         Button Yes = (Button) findViewById(R.id.btn_yes);
         Button No = (Button) findViewById(R.id.btn_no);
-        progressDialog = new ProgressDialog(this);
-        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean enabled = service
-                .isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!enabled) {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }
-        callPermission();
-        Yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setZone("Yes");
-                maps("Yes");
+        if (mAuth.getCurrentUser() != null) {
+            progressDialog = new ProgressDialog(this);
+            LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+            boolean enabled = service
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
             }
-        });
-        No.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setZone("No");
-                maps("No");
-            }
-        });
+            callPermission();
+            greenPoints=getZoneData(greenZoneData);
+            redPoints=getZoneData(redZoneData);
+            Yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setZone("Yes");
+                    maps("Yes");
+                }
+            });
+            No.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setZone("No");
+                    maps("No");
+                }
+            });
 
+        }
+    }
+    public ArrayList<GeoPoint> getZoneData(DatabaseReference zoneReference)
+    {
+        final ArrayList<GeoPoint> zonePoint=new ArrayList<>();
+        progressDialog.setMessage(getApplicationContext().getResources().getString(R.string.safe_loading));
+        progressDialog.show();
+        zoneReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot zoneSnapshot:dataSnapshot.getChildren())
+                {
+                    String UID= zoneSnapshot.getKey().toString();
+                    String latitude=zoneSnapshot.child("Latitude").getValue().toString();
+                    String longitude=zoneSnapshot.child("Longitude").getValue().toString();
+                    GeoPoint temp=new GeoPoint(Double.parseDouble(latitude),Double.parseDouble(longitude));
+                    zonePoint.add(temp);
+                    progressDialog.dismiss();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressDialog.hide();
+            }
+        });
+        return zonePoint;
     }
     public void setZone(String status)
     {
@@ -136,6 +174,8 @@ public class SafeActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("Latitude", latitude);
                     intent.putExtra("Longitude",longitude);
+                    intent.putParcelableArrayListExtra("GreenZone",greenPoints);
+                    intent.putParcelableArrayListExtra("RedZone",redPoints);
                     startActivity(intent);
 
                     finish();

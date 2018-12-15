@@ -16,9 +16,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.android.myapplication.LoginWork.SignInActivity;
 import com.example.android.myapplication.fragments.MapEventFragment;
 import com.example.android.myapplication.fragments.MarkersClusteringFragment;
 import com.example.android.myapplication.fragments.MarkersInfoWindowFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.mmi.util.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private int selectedFragmentIndex = 0;
     private String longitude;
     private String latitude;
+    ArrayList<GeoPoint> greenZone;
+    ArrayList<GeoPoint> redZone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +44,17 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         latitude=intent.getStringExtra("Latitude");
         longitude=intent.getStringExtra("Longitude");
+        greenZone=intent.getParcelableArrayListExtra("GreenZone");
+        redZone=intent.getParcelableArrayListExtra("RedZone");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
         testFragmentNames = new ArrayList<String>();
         testFragmentNames.add(getString(R.string.map_markers));
-        testFragmentNames.add(getString(R.string.map_event));
+        testFragmentNames.add("Change Status");
+        testFragmentNames.add("LogOut");
 
-        testFragmentNames.add(getString(R.string.marker_cluster));
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -132,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private void selectItem(int position) {
         selectedFragmentIndex = position;
         // Create a new fragment and specify the planet to show based on position
-        Fragment fragment;
+        Fragment fragment=new MarkersInfoWindowFragment();;
 
         switch (position) {
             case 0:
@@ -140,12 +147,15 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case 1:
-                fragment = new MapEventFragment();
+                startActivity(new Intent(MainActivity.this, SafeActivity.class));
+                finish();
+                break;
+            case 2:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                finish();
                 break;
 
-            case 3:
-                fragment = new MarkersClusteringFragment();
-                break;
             default:
                 fragment = new MarkersInfoWindowFragment();
 
@@ -153,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("Longitude", longitude);
         bundle.putString("Latitude",latitude);
+        bundle.putParcelableArrayList("GreenZone",greenZone);
+        bundle.putParcelableArrayList("RedZone",redZone);
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragment.setArguments(bundle);

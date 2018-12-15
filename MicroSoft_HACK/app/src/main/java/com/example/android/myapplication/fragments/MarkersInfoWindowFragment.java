@@ -9,8 +9,13 @@ import com.example.android.myapplication.util.Data;
 import com.example.android.myapplication.util.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.mmi.layers.BasicInfoWindow;
 import com.mmi.layers.Marker;
+import com.mmi.layers.MarkerClusterer;
 import com.mmi.util.GeoPoint;
 
 import java.util.ArrayList;
@@ -21,43 +26,94 @@ public class MarkersInfoWindowFragment extends MapBaseFragment {
     private static final String TAG = MarkersInfoWindowFragment.class.getSimpleName();
     private static String longitude;
     private static String latitude;
+    private ArrayList<GeoPoint> greenPoint;
+    private ArrayList<GeoPoint> redPoint;
     @Override
     public String getSampleTitle() {
         return "Maps Marker";
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         longitude = getArguments().getString("Longitude");// data which sent from activity
         latitude=getArguments().getString("Latitude");
-        ArrayList<MarkerModel> markerModels = new ArrayList<>();
-        markerModels.add(new MarkerModel( new GeoPoint(28.549356, 77.26780099999999)));
-        markerModels.add(new MarkerModel( new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude))));
-        markerModels.add(new MarkerModel( new GeoPoint(28.554454, 77.265473)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.549637999999998, 77.262909)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.555245, 77.266117)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.558149, 77.269787)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.555369, 77.271042)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.544428, 77.279057)));
-        markerModels.add(new MarkerModel(new GeoPoint(28.538275, 77.283821)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.536604999999998, 77.2872)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.538442999999997, 77.291921)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.542326, 77.30133)));
-        markerModels.add(new MarkerModel( new GeoPoint(28.542609, 77.30211299999999)));
-        markerModels.add(new MarkerModel(new GeoPoint(28.543042999999997, 77.302843)));
+        greenPoint=getArguments().getParcelableArrayList("GreenZone");
+        redPoint=getArguments().getParcelableArrayList("RedZone");
+        ArrayList<MarkerModel> greenMarkerModels = new ArrayList<>();
+        for(int i=0;i<greenPoint.size();i++)
+        {
+            greenMarkerModels.add(new MarkerModel(greenPoint.get(i)));
+        }
+        ArrayList<MarkerModel> redMarkerModels=new ArrayList<>();
+        for(int i=0;i<redPoint.size();i++)
+        {
+            redMarkerModels.add(new MarkerModel(redPoint.get(i)));
+        }
 
 
-        addOverLays(markerModels);
+        addOverLays(greenMarkerModels,redMarkerModels);
     }
 
-
-    void addOverLays(ArrayList<MarkerModel> markerModels) {
-        ArrayList<GeoPoint> points = new ArrayList<>();
+    void addOverLays(ArrayList<MarkerModel> greenModels,ArrayList<MarkerModel> redModel) {
+       /** ArrayList<GeoPoint> points = new ArrayList<>();**/
         BasicInfoWindow infoWindow = new BasicInfoWindow(R.layout.tooltip, mMapView);
 
         infoWindow.setTipColor(getResources().getColor(R.color.base_color));
-        for (MarkerModel markerModel : markerModels) {
+
+      MarkerClusterer redMarkerCluster=new MarkerClusterer(getActivity());
+       MarkerClusterer greenMarkerCluster=new MarkerClusterer(getActivity());
+
+       greenMarkerCluster.setColor(getResources().getColor(R.color.green_color));
+        redMarkerCluster.setColor(getResources().getColor(R.color.red_color));
+
+        greenMarkerCluster.mAnchorV=Marker.ANCHOR_CENTER;
+        redMarkerCluster.mAnchorV=Marker.ANCHOR_CENTER;
+
+        greenMarkerCluster.mTextAnchorV=Marker.ANCHOR_CENTER;
+        redMarkerCluster.mTextAnchorV=Marker.ANCHOR_CENTER;
+
+        greenMarkerCluster.setTextSize(12);
+        redMarkerCluster.setTextSize(12);
+
+        ArrayList<GeoPoint> points = new ArrayList<>();
+        MarkerModel currentLocation=new MarkerModel(new GeoPoint(Double.parseDouble(latitude),Double.parseDouble(longitude)));
+        Marker currentMarker=new Marker(mMapView);
+        currentMarker.setPosition(currentLocation.getGeoPoint());
+        //currentMarker.setIcon(getResources().getDrawable(R.drawable.marker_selected));
+        currentMarker.setInfoWindow(null);
+        greenMarkerCluster.add(currentMarker);
+        points.add(currentLocation.getGeoPoint());
+        for (MarkerModel GreenMarkerModel : greenModels) {
+            Marker marker = new Marker(mMapView);
+           // marker.setIcon(getResources().getDrawable(R.drawable.transparentcircle));
+
+            marker.setPosition(GreenMarkerModel.getGeoPoint());
+            marker.setInfoWindow(null);
+            marker.setRelatedObject(GreenMarkerModel);
+            greenMarkerCluster.add(marker);
+            points.add(GreenMarkerModel.getGeoPoint());
+        }
+        for (MarkerModel RedMarkerModel : redModel) {
+            Marker marker = new Marker(mMapView);
+            //marker.setIcon(getResources().getDrawable(R.drawable.redcircle));
+
+            marker.setPosition(RedMarkerModel.getGeoPoint());
+            marker.setInfoWindow(null);
+            marker.setRelatedObject(RedMarkerModel);
+
+            redMarkerCluster.add(marker);
+            points.add(RedMarkerModel.getGeoPoint());
+        }
+        mMapView.setBounds(points);
+        ArrayList<MarkerClusterer> zoneCluster=new ArrayList<>();
+        zoneCluster.add(greenMarkerCluster);
+        zoneCluster.add(redMarkerCluster);
+        mMapView.getOverlays().addAll(zoneCluster);
+        mMapView.invalidate();
+
+       /** for (MarkerModel markerModel : markerModels) {
             Marker marker = new Marker(mMapView);
             //marker.setTitle(markerModel.getTitle());
             //marker.setDescription(markerModel.getDescription());
@@ -71,7 +127,7 @@ public class MarkersInfoWindowFragment extends MapBaseFragment {
             points.add(markerModel.getGeoPoint());
         }
         mMapView.invalidate();
-        mMapView.setBounds(points);
+        mMapView.setBounds(points);**/
     }
 
 
