@@ -5,22 +5,22 @@ var lattitude1 = [];
 var longitude1 = [];
 
 
-var database1 = firebase.database().ref().child("SafeCoordinates");
+var database1 = firebase.database().ref().child("Yes");
 
-var database = firebase.database().ref().child("Coordinates");
+var database = firebase.database().ref().child("No");
 
 database.on("child_added", snap => {
-    var lat = snap.child("Lattitude").val();
+    var lat = parseFloat(snap.child("Latitude").val());
     console.log(lat)
     lattitude.push(lat);
-    var long = snap.child("Longitude").val();
+    var long = parseFloat(snap.child("Longitude").val());
     longitude.push(long);
     // $(".show").append("<p>"+lat+ " " + long + "</p>");
 })
 console.log(lattitude);
 
 database1.on("child_added", snap => {
-    var lat1 = snap.child("Lattitude").val();
+    var lat1 = snap.child("Latitude").val();
     console.log(lat1)
     lattitude1.push(lat1);
     var long1 = snap.child("Longitude").val();
